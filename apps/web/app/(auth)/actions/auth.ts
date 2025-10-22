@@ -4,6 +4,7 @@ import { BACKEND_URL } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import { FormState } from "../types/types";
 import { LoginFormSchema, SignupFormSchema } from "../types/schemas/auth";
+import { createSession } from "./session";
 
 export async function signup(
   state: FormState,
@@ -74,17 +75,25 @@ export async function login(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(validatedFields.data),
-  })
+  });
 
-
-  if(response.ok){
+  if (response.ok) {
     const result = await response.json();
-    //TODO: Create Session for Auth user
-    console.log({result});
-  }
-  else {
+
+    await createSession({
+      user: {
+        id: result.id,
+        name: result.name,
+      },
+    });
+
+    console.log({ result });
+    redirect("/");
+
+  } else {
     return {
-        message: response.status === 401 ? "Invalidad Credentials" : response.statusText
-    }
+      message:
+        response.status === 401 ? "Invalidad Credentials" : response.statusText,
+    };
   }
 }
