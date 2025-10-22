@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useFormState } from "react-dom"
 import SubmitButton from "@/components/ui/submit-button"
-import { signup } from "@/lib/auth"
+import { signup } from "../actions/auth"
 
 export function SignupForm({
     className,
