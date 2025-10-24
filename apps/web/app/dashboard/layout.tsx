@@ -7,12 +7,19 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb"
+//import { getSession } from "../(auth)/actions/session"
+//import { redirect } from "next/navigation"
 
 export default function DashboardLayout({
   children,
 }: {
   children: ReactNode
 }) {
+
+/*   const session = await getSession()
+
+  if (!session || !session.user) redirect("/login"); */
+
   return (
     <SidebarProvider>
       <AppSidebar />
