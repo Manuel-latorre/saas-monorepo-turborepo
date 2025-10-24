@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      Users     @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Block {
+  id          String              @id
+  sessionId   String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime
+  blockStatus PlanificationStatus @default(PENDING)
+  description String?
+  Session     Session             @relation(fields: [sessionId], references: [id])
+  Exercise    Exercise[]
+}
+
+model Client {
+  id                String           @id
+  isNew             IsNew            @default(TRUE)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime
+  personalTrainerId String?
+  User              Users             @relation(fields: [id], references: [id], onDelete: Cascade)
+  PersonalTrainer   PersonalTrainer? @relation(fields: [personalTrainerId], references: [id])
+  Planification     Planification[]
+}
+
+model Exercise {
+  id             String              @id
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime
+  blockId        String
+  name           String
+  videoUrl       String?
+  weight         Int
+  rir            Int
+  pse            Int
+  reps           Int
+  series         Int
+  restTime       Int
+  notes          String?
+  exerciseStatus PlanificationStatus @default(PENDING)
+  Block          Block               @relation(fields: [blockId], references: [id])
+}
+
+model PersonalTrainer {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Client    Client[]
+  User      Users     @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Planification {
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  clientId  String
+  Client    Client    @relation(fields: [clientId], references: [id])
+  Session   Session[]
+}
+
+model Session {
+  id              String              @id
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime
+  planificationId String
+  sessionStatus   PlanificationStatus @default(PENDING)
+  description     String?
+  Block           Block[]
+  Planification   Planification       @relation(fields: [planificationId], references: [id])
+}
+
+model Users {
+  id               String           @id
+  email            String           @unique
+  name             String
+  phone            String?          @unique
+  password         String
+  role             Role             @default(CLIENT)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime
+  magicLinkExpires DateTime?
+  magicLinkToken   String?
+  Admin            Admin?
+  Client           Client?
+  PersonalTrainer  PersonalTrainer?
+}
+
+enum IsNew {
+  TRUE
+  FALSE
+}
+
+enum PlanificationStatus {
+  PENDING
+  COMPLETED
+  IN_PROGRESS
+  CANCELLED
+}
+
+enum Role {
+  ADMIN
+  PERSONAL_TRAINER
+  CLIENT
+}
