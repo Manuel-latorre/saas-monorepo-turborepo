@@ -5,7 +5,7 @@ export type Session = {
         name: string
     }
 
-    /* accessToken: string;
-    refreshToken:string; */
+    accessToken: string;
+    //refreshToken:string;
 }
 
