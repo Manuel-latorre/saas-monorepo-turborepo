@@ -85,6 +85,7 @@ export async function login(
         id: result.id,
         name: result.name,
       },
+      accessToken:result.accessToken
     });
 
     console.log({ result });
