@@ -88,7 +88,7 @@ export async function login(
     });
 
     console.log({ result });
-    redirect("/");
+    redirect("/dashboard");
 
   } else {
     return {
