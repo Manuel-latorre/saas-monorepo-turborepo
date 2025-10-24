@@ -18,6 +18,8 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.1",
     "jose": "^6.1.0",
     "zod": "^4.1.12"
   }
