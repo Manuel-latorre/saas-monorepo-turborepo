@@ -85,7 +85,8 @@ export async function login(
         id: result.id,
         name: result.name,
       },
-      accessToken:result.accessToken
+      accessToken:result.accessToken,
+      refreshToken: result.refreshToken
     });
 
     console.log({ result });
