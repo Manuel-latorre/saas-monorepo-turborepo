@@ -89,6 +89,7 @@ model Users {
   name             String
   phone            String?          @unique
   password         String
+  hashedRefreshToken String?
   role             Role             @default(CLIENT)
   createdAt        DateTime         @default(now())
   updatedAt        DateTime
