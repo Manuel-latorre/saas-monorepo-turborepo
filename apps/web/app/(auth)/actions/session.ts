@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { jwtVerify, SignJWT } from "jose";
 import { Session } from "../types/session";
@@ -43,7 +43,25 @@ export async function getSession() {
   }
 }
 
-
-export async function deleteSession(){
+export async function deleteSession() {
   (await cookies()).delete("session");
+}
+
+export async function updateTokens({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string;
+  refreshToken: String;
+}) {
+  const cookie = (await cookies()).get("session")?.value;
+
+  if(!cookie) return null;
+
+  const {payload} = await jwtVerify<Session>(cookie, encodedKey);
+
+
+  if (!payload) throw new Error("Session not found");
+
+
 }
