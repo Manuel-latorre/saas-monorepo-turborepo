@@ -85,6 +85,7 @@ export async function login(
       user: {
         id: result.id,
         name: result.name,
+        role: result.role
       },
       accessToken:result.accessToken,
       refreshToken: result.refreshToken
