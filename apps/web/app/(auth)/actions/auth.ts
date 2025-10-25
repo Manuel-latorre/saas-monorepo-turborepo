@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import { FormState } from "../types/types";
 import { LoginFormSchema, SignupFormSchema } from "../types/schemas/auth";
-import { createSession } from "./session";
+import { createSession, updateTokens } from "./session";
 
 export async function signup(
   state: FormState,
@@ -117,9 +117,13 @@ export async function refreshToken (oldRefreshToken:string) {
 
     const {accessToken, refreshToken} = await response.json();
 
-    
+    await updateTokens({accessToken, refreshToken});
+
+    return accessToken;
 
   } catch (error) {
+    console.error("Refresh token failed: ", error);
+    return null;
     
   }
 }
