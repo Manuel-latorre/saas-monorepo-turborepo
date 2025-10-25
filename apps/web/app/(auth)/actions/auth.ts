@@ -4,7 +4,8 @@ import { BACKEND_URL } from "@/lib/constants";
 import { redirect } from "next/navigation";
 import { FormState } from "../types/types";
 import { LoginFormSchema, SignupFormSchema } from "../types/schemas/auth";
-import { createSession, updateTokens } from "./session";
+import { createSession, getSession, updateTokens } from "./session";
+import { FetchOptions } from "../types/auth";
 
 export async function signup(
   state: FormState,
@@ -126,4 +127,33 @@ export async function refreshToken (oldRefreshToken:string) {
     return null;
     
   }
+}
+
+
+export async function authFetch (url:string | URL, options:FetchOptions = {}){
+
+  const session = await getSession();
+
+  options.headers = {
+    ...options.headers,
+    Authorization: `Bearer ${session?.accessToken}`
+  }
+
+  let response = await fetch(url, options);
+
+
+  if(response.status === 401){
+    if(!session?.refreshToken) throw new Error("refresh token not found!");
+
+
+    const newAccessToken = await refreshToken(session.refreshToken);
+
+    if(newAccessToken){
+      options.headers.Authorization = `Bearer ${newAccessToken}`;
+
+      response = await fetch(url, options);
+    }
+  }
+
+  return response;
 }
