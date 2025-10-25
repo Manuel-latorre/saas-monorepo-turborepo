@@ -99,3 +99,27 @@ export async function login(
     };
   }
 }
+
+
+export async function refreshToken (oldRefreshToken:string) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
+      method: "POST",
+      body: JSON.stringify({
+        refresh: oldRefreshToken
+      })
+    })
+
+    if(!response.ok)  {
+      throw new Error("Failed to refresh token");
+    }
+
+
+    const {accessToken, refreshToken} = await response.json();
+
+    
+
+  } catch (error) {
+    
+  }
+}
