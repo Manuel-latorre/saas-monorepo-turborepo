@@ -1,4 +1,4 @@
-import LoginButton from "@/components/login-button";
+import LoginButton from "../(auth)/components/login-button";
 
 export default function DashboardPage() {
     return (
