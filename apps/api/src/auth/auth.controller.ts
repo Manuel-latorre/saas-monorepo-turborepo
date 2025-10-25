@@ -39,9 +39,12 @@ export class AuthController {
     @Get("google/login")
     googleLogin(){}
 
-    
+
     @UseGuards(GoogleAuthGuard)
     @Get("google/callback")
-    googleCallback(){}
+    googleCallback(@Request() req){
+      console.log("GOOGLE USER--->:", req.user);
+      
+    }
 
 }
