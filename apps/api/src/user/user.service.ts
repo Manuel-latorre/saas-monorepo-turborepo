@@ -47,6 +47,17 @@ export class UserService {
     })
   }
 
+  async updateHashedRefreshToken(userId:string, hashedRT:string | null){
+    return await this.prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedRefreshToken: hashedRT
+      }
+    })
+  }
+
   /* findAll() {
     return `This action returns all user`;
   }
