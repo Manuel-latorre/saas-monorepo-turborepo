@@ -17,6 +17,8 @@ import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { type Response } from 'express';
 import { Public } from './decorators/public.decorator';
 import { Roles } from './decorators/roles.decorator';
+import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from './guards/roles/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +37,8 @@ export class AuthController {
 
 
   @Roles("ADMIN")
+  //@UseGuards(RolesGuard)
+  //@UseGuards(JwtAuthGuard)
   @Get('protected')
   getAll(@Request() req) {
     return {
