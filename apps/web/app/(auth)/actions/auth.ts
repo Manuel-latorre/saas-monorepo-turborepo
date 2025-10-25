@@ -118,7 +118,15 @@ export async function refreshToken (oldRefreshToken:string) {
 
     const {accessToken, refreshToken} = await response.json();
 
-    await updateTokens({accessToken, refreshToken});
+    const updateRes = await fetch("http://localhost:3000/api/auth/update", {
+      method: "POST",
+      body:JSON.stringify({
+        accessToken, 
+        refreshToken
+      })
+    });
+
+    if(!updateRes.ok) throw new Error("Failed to update the tokens");
 
     return accessToken;
 
