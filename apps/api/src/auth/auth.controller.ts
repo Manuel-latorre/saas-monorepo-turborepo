@@ -16,6 +16,7 @@ import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
 import { type Response } from 'express';
 import { Public } from './decorators/public.decorator';
+import { Roles } from './decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +33,8 @@ export class AuthController {
     return this.authService.login(req.user.id, req.user.name);
   }
 
+
+  @Roles("ADMIN")
   @Get('protected')
   getAll(@Request() req) {
     return {
