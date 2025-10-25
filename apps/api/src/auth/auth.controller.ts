@@ -32,11 +32,10 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req) {
-    return this.authService.login(req.user.id, req.user.name);
+    return this.authService.login(req.user.id, req.user.name, req.user.role);
   }
 
-
-  @Roles("ADMIN")
+  @Roles('ADMIN')
   //@UseGuards(RolesGuard)
   //@UseGuards(JwtAuthGuard)
   @Get('protected')
@@ -58,22 +57,24 @@ export class AuthController {
   @Get('google/login')
   googleLogin() {}
 
-
   @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   async googleCallback(@Request() req, @Res() res: Response) {
     //console.log("GOOGLE USER--->:", req.user);
 
-    const response = await this.authService.login(req.user.id, req.user.name);
+    const response = await this.authService.login(
+      req.user.id,
+      req.user.name,
+      req.user.role,
+    );
     res.redirect(
-      `http://localhost:3001/api/auth/google/callback?userId=${response.id}&name=${response.name}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`,
+      `http://localhost:3001/api/auth/google/callback?userId=${response.id}&name=${response.name}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&role=${response.role}`,
     );
   }
 
-
-  @Post("signout")
-  signOut(@Req() req){
-    return this.authService.signOut(req.user.id)
+  @Post('signout')
+  signOut(@Req() req) {
+    return this.authService.signOut(req.user.id);
   }
 }
